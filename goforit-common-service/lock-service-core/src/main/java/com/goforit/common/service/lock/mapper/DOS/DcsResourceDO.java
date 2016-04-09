@@ -1,4 +1,4 @@
-package com.goforit.common.service.lock.mapper.DAO;
+package com.goforit.common.service.lock.mapper.DOS;
 
 /**
  * Created by junqingfjq on 16/4/5.
