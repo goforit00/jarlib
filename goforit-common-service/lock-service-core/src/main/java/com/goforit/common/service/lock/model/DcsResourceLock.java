@@ -1,11 +1,11 @@
-package com.goforit.common.service.lock.mapper.DOS;
+package com.goforit.common.service.lock.model;
 
 import java.util.Date;
 
 /**
- * Created by junqingfjq on 16/4/5.
+ * Created by junqingfjq on 16/4/9.
  */
-public class DcsResourceLockDO {
+public class DcsResourceLock {
 
     private String id;
 
