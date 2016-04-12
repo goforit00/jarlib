@@ -10,6 +10,9 @@ public interface DcsResourceManager {
     //~~~ 操作类 ~~~
     DcsResource create(DcsResource dcsResource);
 
+
+
+
     DcsResource update(DcsResource dcsResource);
 
     void delete(String id);
@@ -17,4 +20,6 @@ public interface DcsResourceManager {
     //~~~ 查询类 ~~~
 
     DcsResource get(String id);
+
+    long countByResourceNameAndType(String name,String type);
 }

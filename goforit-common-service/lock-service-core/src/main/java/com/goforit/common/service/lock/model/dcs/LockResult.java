@@ -1,6 +1,7 @@
 package com.goforit.common.service.lock.model.dcs;
 
 import com.goforit.common.service.lock.model.DcsResourceLock;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -19,6 +20,28 @@ public class LockResult {
 
     }
 
+    public LockResult(DcsResourceLock ownedLock,List<DcsResourceLock> othersLocks){
+        this.ownedDcsResourceLock=ownedLock;
+        this.othersDcsResourceLock=othersLocks;
+    }
+
+    public LockResult(DcsResourceLock ownedLock,List<DcsResourceLock> othersLocks,String errMsg){
+        this.ownedDcsResourceLock=ownedLock;
+        this.othersDcsResourceLock=othersLocks;
+        this.errMsg=errMsg;
+    }
+
+    public boolean isLockedByMe(){
+        return ownedDcsResourceLock!=null;
+    }
+
+    public boolean isLockEdByOthers(){
+        return !CollectionUtils.isEmpty(othersDcsResourceLock);
+    }
+
+
+
+    //~~~ setter && getter
     public DcsResourceLock getOwnedDcsResourceLock() {
         return ownedDcsResourceLock;
     }

@@ -7,20 +7,21 @@ public class LockRequest {
 
     /**
      * 创建新锁的时候为非必填
+     * 锁的唯一标识
      */
     private String uniqueBizId;
 
     /**
      * 必填
      * 要加锁的资源名称,
-     * 和resourceType构成锁的唯一标识
+     * 和resourceType构成资源的唯一标识
      */
     private String resourceName;
 
     /**
      * 必填
      * 加锁类型,
-     * 和resourceName构成锁的唯一标识
+     * 和resourceName构成资源的唯一标识
      */
     private String resourceType;
 

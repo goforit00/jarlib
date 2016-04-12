@@ -7,4 +7,6 @@ import com.goforit.common.service.lock.mapper.DOS.DcsResourceLockDO;
  */
 public interface DcsLockMapper extends BaseMapper<DcsResourceLockDO,String>{
 
+    DcsResourceLockDO findLockByBizId(String uniqueBizId);
+
 }

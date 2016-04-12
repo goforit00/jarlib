@@ -33,4 +33,9 @@ public class DcsResourceManagerImpl implements DcsResourceManager {
     public DcsResource get(String id) {
         return null;
     }
+
+    @Override
+    public long countByResourceNameAndType(String name, String type) {
+        return 0;
+    }
 }

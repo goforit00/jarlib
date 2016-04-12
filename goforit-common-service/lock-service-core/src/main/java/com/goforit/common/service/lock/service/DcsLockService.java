@@ -26,12 +26,6 @@ public interface DcsLockService {
      */
     void releaseLockByBizId(String uniqueBizId);
 
-    /**
-     * 根据id释放锁
-     * @param lockId
-     */
-    void releaseLockById(String lockId);
-
 
     /**
      * 是否允许对资源加锁

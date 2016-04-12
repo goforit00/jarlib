@@ -7,4 +7,8 @@ import com.goforit.common.service.lock.mapper.DOS.DcsResourceDO;
  */
 public interface DcsResourceMapper extends BaseMapper<DcsResourceDO,String>{
 
+    DcsResourceDO findByResourceNameAndType(String name,String type);
+
+    DcsResourceDO lockByResourceNameAndType(String name,String type);
+
 }
