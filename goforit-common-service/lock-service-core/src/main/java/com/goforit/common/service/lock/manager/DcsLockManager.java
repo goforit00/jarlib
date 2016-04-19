@@ -12,7 +12,7 @@ import java.util.List;
 public interface DcsLockManager {
 
     //~~~ 操作类 ~~~
-    DcsResource createSharedResource(LockRequest lockRequest);
+    DcsResource createSharedResourceAndLock(LockRequest lockRequest);
 
     DcsResourceLock lockSharedResource(LockRequest lockRequest);
 
@@ -21,7 +21,7 @@ public interface DcsLockManager {
 
     DcsResourceLock update(DcsResourceLock dcsResourceLock);
 
-    void delete(String uniqueBizId);
+    void deleteLock(String uniqueBizId);
 
     void deleteResource(String resourceId);
 
@@ -29,10 +29,15 @@ public interface DcsLockManager {
 
     //~~~ 查询类 ~~~
 
+    DcsResource lockResourceByResourceId(String resourceId);
+
     DcsResourceLock get(String id);
 
-    List<DcsResourceLock> findOthersLock(LockRequest lockRequest);
+    List<DcsResourceLock> findOthersLock(String ownedLockBizId,String resourceId);
 
     DcsResourceLock findByUniqueBizId(String bizId);
+
+    List<DcsResourceLock> findByResourceId(String resourceId);
+
 
 }

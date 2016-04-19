@@ -11,4 +11,6 @@ public interface DcsResourceMapper extends BaseMapper<DcsResourceDO,String>{
 
     DcsResourceDO lockByResourceNameAndType(String name,String type);
 
+    DcsResourceDO lockByResourceId(String resourceId);
+
 }
