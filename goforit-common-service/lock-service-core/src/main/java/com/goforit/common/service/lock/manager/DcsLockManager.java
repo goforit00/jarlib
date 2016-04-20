@@ -12,7 +12,7 @@ import java.util.List;
 public interface DcsLockManager {
 
     //~~~ 操作类 ~~~
-    DcsResource createSharedResourceAndLock(LockRequest lockRequest);
+    DcsResource createSharedResource(LockRequest lockRequest);
 
     DcsResourceLock lockSharedResource(LockRequest lockRequest);
 

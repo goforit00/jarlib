@@ -14,7 +14,15 @@ public interface DcsLockMapper extends BaseMapper<DcsResourceLockDO,String>{
 
     void deleteLockByBizId(String lockBizId);
 
+    int updateExpiredOnTime(String uniqueBizId);
+
     DcsResourceLockDO findLockByBizId(String uniqueBizId);
 
     List<DcsResourceLockDO> findOthersLock(String lockBizId,String resourceId);
+
+    List<DcsResourceLockDO> findLocksByResourceId(String resourceId);
+
+    DcsResourceLockDO findLivedLockByBizIdForUpdate(String lockBizId);
+
+    List<DcsResourceLockDO> findLivedLocksByResourceId(String resourceId);
 }

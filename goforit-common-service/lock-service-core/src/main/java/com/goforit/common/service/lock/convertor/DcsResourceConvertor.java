@@ -14,7 +14,7 @@ public class DcsResourceConvertor {
         return null;
     }
 
-    public static DcsResource do2BO(DcsResourceDO dcsResourceDO){
+    public static DcsResource do2Bo(DcsResourceDO dcsResourceDO){
         return null;
     }
 

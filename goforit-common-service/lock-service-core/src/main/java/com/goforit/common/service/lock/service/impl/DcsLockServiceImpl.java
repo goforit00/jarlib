@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.UUID;
@@ -55,7 +54,7 @@ public class DcsLockServiceImpl implements DcsLockService{
             public LockResult doInTransaction(TransactionStatus status) {
 
                 //创建资源（内部包掉存在的情况）
-                DcsResource dcsResource=dcsLockManager.createSharedResourceAndLock(lockRequest);
+                DcsResource dcsResource=dcsLockManager.createSharedResource(lockRequest);
 
                 DcsResourceLock ownedLock=dcsLockManager.lockSharedResource(lockRequest);
 
@@ -96,10 +95,7 @@ public class DcsLockServiceImpl implements DcsLockService{
                 dcsLockManager.deleteLock(uniqueBizId);
 
                 //释放资源
-                dcsLockManager.lockResourceByResourceId(resourceId);
-                if(CollectionUtils.isEmpty(dcsLockManager.findByResourceId(resourceId))){
-                    dcsLockManager.deleteResource(resourceId);
-                }
+                dcsLockManager.deleteResource(resourceId);
 
                 return null;
             }
