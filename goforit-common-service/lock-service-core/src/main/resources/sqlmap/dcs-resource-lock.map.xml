@@ -3,20 +3,54 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.goforit.common.service.lock.mapper.DcsLockMapper">
-    <resultMap id="dcsResourceLockDO" type="DcsResourceLockDO">
-        <id property="" column="id"/>
-        <result property="tableName" column="table_name"/>
+    <resultMap id="dcsResourceLockDOMap" type="DcsResourceLockDO">
+        <id property="id" column="id"/>
+        <result property="uniqueBizId" column="unique_biz_id"/>
+        <result property="resourceId" column="resource_id"/>
+        <result property="lockName" column="lock_name"/>
+        <result property="lockType" column="lockType"/>
+        <result property="owner" column="owner"/>
+        <result property="expiredDate" column="expired_date"/>
+        <result property="utcModified" column="utc_modified"/>
+        <result property="utcCreated" column="utcCreated"/>
     </resultMap>
 
-    <sql id="columns_list">
-        id, name, display_name, tenant_id, utc_modified, utc_create, utc_deleted
+    <sql id="dcsResourceLockColumns">
+        id, unique_biz_id, resource_id, lock_name, lockType, owner, expired_date, utc_modified, utcCreated
     </sql>
 
-    <insert id="insert" parameterType="SequenceDO" useGeneratedKeys="true" keyProperty="id">
-        insert into sequence(table_name) values(#{tableName})
-    </insert>
+    <update id="updateExpiredOnTime">
+        update dcs_resource_lock set expired_date=#{expiredDate}, utcModified=CURRENT_TIMESTAMP() where unique_biz_id=#{uniqueBizId}
+    </update>
+
+    <delete id="deleteLockByBizId">
+        delete from dcs_resource_lock where unique_biz_id=#{uniqueBizId}
+    </delete>
+
+    <delete id="deleteExpiredLocksByResourceId">
+        <![CDATA[delete from dcs_resource_lock where resource_id=#{resourceId} and expired_date <NOW()]]>
+    </delete>
 
 
+    <select id="findLivedLocksByResourceId" resultMap="dcsResourceLockDOMap">
+        select <include refid="dcsResourceLockColumns"/> from dcs_resource_lock where resource_id=#{resourceId} and expired_date>NOW()
+    </select>
+
+    <select id="findLivedLockByBizIdForUpdate" resultMap="dcsResourceLockDOMap">
+        select <include refid="dcsResourceLockColumns"/> from dcs_resource_lock where unique_biz_id=#{uniqueBizId} and expired_date>NOW()
+    </select>
+
+    <select id="findLocksByResourceId" resultMap="dcsResourceLockDOMap">
+        select <include refid="dcsResourceLockColumns"/> from dcs_resource_lock where resource_id=#{resourceId}
+    </select>
+
+    <select id="findOthersLock" resultMap="dcsResourceLockDOMap">
+        select <include refid="dcsResourceLockColumns"/> from dcs_resource_lock where resource_id=#{resourceId} and unique_biz_id!=#{uniqueBizId}
+    </select>
+
+    <select id="findLockByBizId" resultMap="dcsResourceLockDOMap">
+        select <include refid="dcsResourceLockColumns"/> from dcs_resource_lock where unique_biz_id=#{uniqueBizId}
+    </select>
 
 
 </mapper>

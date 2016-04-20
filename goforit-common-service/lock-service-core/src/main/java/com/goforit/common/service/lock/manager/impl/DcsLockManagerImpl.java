@@ -1,5 +1,6 @@
 package com.goforit.common.service.lock.manager.impl;
 
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -75,7 +76,7 @@ public class DcsLockManagerImpl implements DcsLockManager {
 
         //已有所，返回
         if(null!=dcsResourceLock){
-            updateLock(dcsResourceLock);
+            updateLock(dcsResourceLock,lockRequest.getDuration());
             return dcsResourceLock;
         }
 
@@ -204,9 +205,10 @@ public class DcsLockManagerImpl implements DcsLockManager {
         return null;
     }
 
-    private void updateLock(DcsResourceLock dcsResourceLock){
+    private void updateLock(DcsResourceLock dcsResourceLock,int duration){
 
-        dcsLockMapper.updateExpiredOnTime(dcsResourceLock.getUniqueBizId());
+        //TODO
+        dcsLockMapper.updateExpiredOnTime(dcsResourceLock.getUniqueBizId(),new Date(duration));
 
     }
 
