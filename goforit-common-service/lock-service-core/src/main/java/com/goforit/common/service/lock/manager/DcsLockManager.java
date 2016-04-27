@@ -29,15 +29,15 @@ public interface DcsLockManager {
 
     //~~~ 查询类 ~~~
 
-    DcsResource lockResourceByResourceId(String resourceId);
+//    DcsResource lockResourceByResourceId(String resourceId);
 
-    DcsResourceLock get(String id);
+//    DcsResourceLock get(String id);
 
     List<DcsResourceLock> findOthersLock(String ownedLockBizId,String resourceId);
 
     DcsResourceLock findByUniqueBizId(String bizId);
 
-    List<DcsResourceLock> findByResourceId(String resourceId);
+//    List<DcsResourceLock> findByResourceId(String resourceId);
 
 
 }

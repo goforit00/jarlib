@@ -1,5 +1,7 @@
 package com.goforit.common.service.lock.model;
 
+import com.goforit.common.service.lock.model.dcs.LockRequest;
+
 import java.util.Date;
 
 /**
@@ -17,6 +19,13 @@ public class DcsResource {
     private Date utcModified;
 
     private Date utcCreated;
+
+    public DcsResource buildDcsResource(LockRequest lockRequest){
+        this.name=lockRequest.getResourceName();
+        this.type=lockRequest.getResourceType();
+        this.maxLock=lockRequest.getResourceMaxLock();
+        return this;
+    }
 
     public String getId() {
         return id;

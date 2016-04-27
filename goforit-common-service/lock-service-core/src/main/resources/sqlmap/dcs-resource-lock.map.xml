@@ -8,19 +8,28 @@
         <result property="uniqueBizId" column="unique_biz_id"/>
         <result property="resourceId" column="resource_id"/>
         <result property="lockName" column="lock_name"/>
-        <result property="lockType" column="lockType"/>
+        <result property="lockType" column="lock_type"/>
         <result property="owner" column="owner"/>
         <result property="expiredDate" column="expired_date"/>
         <result property="utcModified" column="utc_modified"/>
-        <result property="utcCreated" column="utcCreated"/>
+        <result property="utcCreated" column="utc_created"/>
     </resultMap>
 
     <sql id="dcsResourceLockColumns">
-        id, unique_biz_id, resource_id, lock_name, lockType, owner, expired_date, utc_modified, utcCreated
+        id, unique_biz_id, resource_id, lock_name, lock_type, owner, expired_date, utc_modified, utc_created
     </sql>
 
+    <insert id="create" parameterType="DcsResourceLockDO" keyProperty="id">
+        insert into dcs_resource_lock(id,unique_biz_id,resource_id,lock_name,lock_type,owner,expired_date,utc_modified,utc_created)
+        value(#{id},#{uniqueBizId},#{resourceId},#{lockName},#{lockType},#{owner},#{expiredDate},#{utcModified},#{utcCreated})
+    </insert>
+
+    <delete id="delete">
+        delete from dcs_resource_lock where id=#{id}
+    </delete>
+
     <update id="updateExpiredOnTime">
-        update dcs_resource_lock set expired_date=#{expiredDate}, utcModified=CURRENT_TIMESTAMP() where unique_biz_id=#{uniqueBizId}
+        update dcs_resource_lock set expired_date=#{1}, utc_modified=CURRENT_TIMESTAMP() where unique_biz_id=#{0}
     </update>
 
     <delete id="deleteLockByBizId">
@@ -31,6 +40,10 @@
         <![CDATA[delete from dcs_resource_lock where resource_id=#{resourceId} and expired_date <NOW()]]>
     </delete>
 
+
+    <select id="get" resultMap="dcsResourceLockDOMap">
+        select <include refid="dcsResourceLockColumns"/> from dcs_resource_lock where id=#{id}
+    </select>
 
     <select id="findLivedLocksByResourceId" resultMap="dcsResourceLockDOMap">
         select <include refid="dcsResourceLockColumns"/> from dcs_resource_lock where resource_id=#{resourceId} and expired_date>NOW()
@@ -45,7 +58,7 @@
     </select>
 
     <select id="findOthersLock" resultMap="dcsResourceLockDOMap">
-        select <include refid="dcsResourceLockColumns"/> from dcs_resource_lock where resource_id=#{resourceId} and unique_biz_id!=#{uniqueBizId}
+        select <include refid="dcsResourceLockColumns"/> from dcs_resource_lock where resource_id=#{0} and unique_biz_id!=#{1}
     </select>
 
     <select id="findLockByBizId" resultMap="dcsResourceLockDOMap">

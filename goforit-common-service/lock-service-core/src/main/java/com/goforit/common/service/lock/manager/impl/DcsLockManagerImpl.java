@@ -1,7 +1,9 @@
 package com.goforit.common.service.lock.manager.impl;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +59,7 @@ public class DcsLockManagerImpl implements DcsLockManager {
             }
         }catch (DuplicateKeyException de){
             //允许冲突发生 保证资源存在即可
-            LOGGER.warn("xxx");
+            LOGGER.warn("create shared resource DuplicateKeyException.",de);
         }
 
         dcsResource=findByResourceNameAndType(resourceName, resourceType);
@@ -129,15 +131,15 @@ public class DcsLockManagerImpl implements DcsLockManager {
         dcsLockMapper.deleteExpiredLocksByResourceId(resourceId);
     }
 
-    @Override
-    public DcsResource lockResourceByResourceId(String resourceId) {
-        return null;
-    }
-
-    @Override
-    public DcsResourceLock get(String id) {
-        return null;
-    }
+//    @Override
+//    public DcsResource lockResourceByResourceId(String resourceId) {
+//        return null;
+//    }
+//
+//    @Override
+//    public DcsResourceLock get(String id) {
+//        return null;
+//    }
 
     @Override
     public List<DcsResourceLock> findOthersLock(String ownedLockBizId,String resourceId) {
@@ -154,14 +156,14 @@ public class DcsLockManagerImpl implements DcsLockManager {
         return DcsLockConvertor.do2Bo(dcsResourceLockDO);
     }
 
-    @Override
-    public List<DcsResourceLock> findByResourceId(String resourceId) {
-        return null;
-    }
+//    @Override
+//    public List<DcsResourceLock> findByResourceId(String resourceId) {
+//        return null;
+//    }
 
-    private DcsResource lockByResourceNameAndType(String resourceName, String resourceType){
-        return null;
-    }
+//    private DcsResource lockByResourceNameAndType(String resourceName, String resourceType){
+//        return null;
+//    }
 
     private DcsResource findByResourceNameAndType(String resourceName,String resourceType){
 
@@ -180,10 +182,10 @@ public class DcsLockManagerImpl implements DcsLockManager {
         return DcsResourceConvertor.do2Bo(dcsResourceDO);
     }
 
-    private DcsResourceLock findLockByBizId(String uniqueBizId){
-        dcsLockMapper.findLockByBizId(uniqueBizId);
-        return null;
-    }
+//    private DcsResourceLock findLockByBizId(String uniqueBizId){
+//        dcsLockMapper.findLockByBizId(uniqueBizId);
+//        return null;
+//    }
 
     private DcsResourceLock findLivedLockByBizIdForUpdate(String uniqueBizId){
 
@@ -201,14 +203,17 @@ public class DcsLockManagerImpl implements DcsLockManager {
         return DcsLockConvertor.do2Bo(dcsResourceLockDO);
     }
 
-    private List<DcsResourceLock> findLivedLocksByResourceNameAndType(String resourceName, String resourceType){
-        return null;
-    }
+//    private List<DcsResourceLock> findLivedLocksByResourceNameAndType(String resourceName, String resourceType){
+//        return null;
+//    }
 
     private void updateLock(DcsResourceLock dcsResourceLock,int duration){
-
-        //TODO
-        dcsLockMapper.updateExpiredOnTime(dcsResourceLock.getUniqueBizId(),new Date(duration));
+        Date expiredDate=dcsResourceLock.getExpiredDate();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(expiredDate);
+        calendar.add(Calendar.SECOND,duration);
+        expiredDate=calendar.getTime();
+        dcsLockMapper.updateExpiredOnTime(dcsResourceLock.getUniqueBizId(),expiredDate);
 
     }
 

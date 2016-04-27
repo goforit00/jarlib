@@ -9,19 +9,32 @@
         <result property="type" column="type"></result>
         <result property="maxLock" column="max_lock"></result>
         <result property="utcModified" column="utc_modified"></result>
-        <result property="utcCreated" column="utcCreated"></result>
+        <result property="utcCreated" column="utc_created"></result>
     </resultMap>
 
     <sql id="dcsResourceColumns">
         id, name, type, max_lock, utc_modified, utc_created
     </sql>
 
+    <insert id="create" parameterType="DcsResourceDO" keyProperty="id">
+        insert into dcs_resource(id,name,type,max_lock,utc_modified,utc_created) values(#{id},#{name},#{type},#{maxLock},#{utcModified},#{utcCreated})
+    </insert>
+
+    <delete id="delete">
+        delete from dcs_resource where id=#{id}
+    </delete>
+
     <select id="findByResourceNameAndType" resultMap="dcsResourceDOMap">
-        select <include refid="dcsResourceColumns"/> from dcs_resource where name=#{name} and type=#{type}
+        select <include refid="dcsResourceColumns"/> from dcs_resource where name=#{0} and type=#{1}
     </select>
 
     <select id="findResourceForUpdate" resultMap="dcsResourceDOMap">
         select <include refid="dcsResourceColumns"/> from dcs_resource where id=#{id} for update
+    </select>
+
+
+    <select id="get" resultMap="dcsResourceDOMap">
+        select <include refid="dcsResourceColumns"/> from dcs_resource where id=#{id}
     </select>
 
 

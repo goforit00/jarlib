@@ -1,5 +1,8 @@
 package com.goforit.common.service.lock.model;
 
+import com.goforit.common.service.lock.model.dcs.LockRequest;
+import com.goforit.common.service.lock.model.dcs.LockType;
+
 import java.util.Date;
 
 /**
@@ -15,7 +18,7 @@ public class DcsResourceLock {
 
     private String lockName;
 
-    private String lockType;
+    private LockType lockType;
 
     private String owner;
 
@@ -24,6 +27,15 @@ public class DcsResourceLock {
     private Date utcModified;
 
     private Date utcCreated;
+
+    public DcsResourceLock buildResourceLock(LockRequest lockRequest){
+        this.uniqueBizId=lockRequest.getUniqueBizId();
+        this.lockName=lockRequest.getLockName();
+        this.owner=lockRequest.getOwner();
+        this.lockType=lockRequest.getLockType();
+
+        return this;
+    }
 
     public String getId() {
         return id;
@@ -57,11 +69,11 @@ public class DcsResourceLock {
         this.lockName = lockName;
     }
 
-    public String getLockType() {
+    public LockType getLockType() {
         return lockType;
     }
 
-    public void setLockType(String lockType) {
+    public void setLockType(LockType lockType) {
         this.lockType = lockType;
     }
 
@@ -95,5 +107,20 @@ public class DcsResourceLock {
 
     public void setUtcCreated(Date utcCreated) {
         this.utcCreated = utcCreated;
+    }
+
+    @Override
+    public String toString() {
+        return "DcsResourceLock{" +
+                "id='" + id + '\'' +
+                ", uniqueBizId='" + uniqueBizId + '\'' +
+                ", resourceId='" + resourceId + '\'' +
+                ", lockName='" + lockName + '\'' +
+                ", lockType=" + lockType +
+                ", owner='" + owner + '\'' +
+                ", expiredDate=" + expiredDate +
+                ", utcModified=" + utcModified +
+                ", utcCreated=" + utcCreated +
+                '}';
     }
 }

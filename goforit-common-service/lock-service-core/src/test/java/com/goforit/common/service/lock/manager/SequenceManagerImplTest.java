@@ -16,10 +16,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:core-service.xml"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class SequenceManagerImplTest {
+public class SequenceManagerImplTest{
 
     @Autowired
-    private SequenceManager sequenceManager;
+    protected SequenceManager sequenceManager;
 
     @Test
     @DirtiesContext

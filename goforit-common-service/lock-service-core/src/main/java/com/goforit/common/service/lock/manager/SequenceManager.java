@@ -1,5 +1,7 @@
 package com.goforit.common.service.lock.manager;
 
+import java.util.Date;
+
 /**
  * Created by junqingfjq on 16/4/8.
  */
@@ -42,5 +44,7 @@ public interface SequenceManager {
     String generate(TableName tableName);
 
     String generate(TableName tableName,Strategy strategy);
+
+    public Date generateSystemTime();
 
 }

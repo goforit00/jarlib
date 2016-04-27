@@ -19,7 +19,7 @@ public class DcsResourceDO {
 
     private Date utcModified;
 
-    private Date utCreated;
+    private Date utcCreated;
 
     public String getId() {
         return id;
@@ -69,11 +69,11 @@ public class DcsResourceDO {
         this.utcModified = utcModified;
     }
 
-    public Date getUtCreated() {
-        return utCreated;
+    public Date getUtcCreated() {
+        return utcCreated;
     }
 
-    public void setUtCreated(Date utCreated) {
-        this.utCreated = utCreated;
+    public void setUtcCreated(Date utcCreated) {
+        this.utcCreated = utcCreated;
     }
 }
