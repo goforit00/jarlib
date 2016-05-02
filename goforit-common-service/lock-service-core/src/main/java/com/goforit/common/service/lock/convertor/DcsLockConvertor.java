@@ -7,6 +7,8 @@ import com.goforit.common.service.lock.model.dcs.LockType;
 import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,6 +50,7 @@ public class DcsLockConvertor {
 
         DcsResourceLock dcsResourceLock=new DcsResourceLock();
         dcsResourceLock.buildResourceLock(lockRequest);
+        dcsResourceLock.setExpiredDate(getExpiredDate(lockRequest.getDuration()));
 
         return dcsResourceLock;
     }
@@ -63,6 +66,15 @@ public class DcsLockConvertor {
         }
 
         return dcsResourceLocks;
+    }
+
+    private static Date getExpiredDate(int duration){
+
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(calendar.SECOND,duration);
+
+        return calendar.getTime();
     }
 
 }

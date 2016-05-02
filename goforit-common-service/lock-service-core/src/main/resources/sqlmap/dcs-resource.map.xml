@@ -37,6 +37,10 @@
         select <include refid="dcsResourceColumns"/> from dcs_resource where id=#{id}
     </select>
 
+    <select id="findResourceByNameAndTypeForUpdate" resultMap="dcsResourceDOMap">
+        select <include refid="dcsResourceColumns"/> from dcs_resource where name=#{0} and type=#{1}
+    </select>
+
 
 
 </mapper>

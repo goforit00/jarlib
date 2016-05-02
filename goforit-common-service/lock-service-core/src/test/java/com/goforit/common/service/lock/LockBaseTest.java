@@ -1,10 +1,12 @@
 package com.goforit.common.service.lock;
 
+import com.goforit.common.service.lock.manager.DcsLockManager;
 import com.goforit.common.service.lock.manager.SequenceManager;
 import com.goforit.common.service.lock.mapper.DOS.DcsResourceDO;
 import com.goforit.common.service.lock.mapper.DOS.DcsResourceLockDO;
 import com.goforit.common.service.lock.mapper.DcsLockMapper;
 import com.goforit.common.service.lock.mapper.DcsResourceMapper;
+import com.goforit.common.service.lock.service.DcsLockService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Calendar;
@@ -16,6 +18,12 @@ import java.util.UUID;
  * Created by junqingfjq on 16/4/24.
  */
 public abstract class LockBaseTest {
+
+    @Autowired
+    protected DcsLockService dcsLockService;
+
+    @Autowired
+    protected DcsLockManager dcsLockManager;
 
     @Autowired
     protected DcsLockMapper dcsLockMapper;
@@ -76,5 +84,10 @@ public abstract class LockBaseTest {
         calendar.add(calendar.SECOND,EXPIRED_DATE);
 
         return calendar.getTime();
+    }
+
+
+    protected long caculateTime(Date oldTime,Date newTime){
+        return newTime.getTime()-oldTime.getTime();
     }
 }

@@ -1,6 +1,7 @@
 package com.goforit.common.service.lock.manager;
 
 import junit.framework.Assert;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by junqingfjq on 16/4/8.
@@ -23,7 +25,7 @@ public class SequenceManagerImplTest{
 
     @Test
     @DirtiesContext
-//    @Transactional
+    @Transactional
     public void testBase(){
 
         String id=sequenceManager.generate(SequenceManager.TableName.DCS_RESOURCE);

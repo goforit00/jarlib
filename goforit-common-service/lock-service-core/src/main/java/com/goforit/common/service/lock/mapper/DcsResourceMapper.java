@@ -15,5 +15,6 @@ public interface DcsResourceMapper extends BaseMapper<DcsResourceDO,String>{
 
     DcsResourceDO findResourceForUpdate(String resourceId);
 
+    DcsResourceDO findResourceByNameAndTypeForUpdate(String resourceName,String resourceType);
 
 }

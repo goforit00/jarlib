@@ -17,9 +17,7 @@ public interface DcsLockManager {
     DcsResourceLock lockSharedResource(LockRequest lockRequest);
 
 
-
-
-    DcsResourceLock update(DcsResourceLock dcsResourceLock);
+//    DcsResourceLock update(DcsResourceLock dcsResourceLock);
 
     void deleteLock(String uniqueBizId);
 
@@ -32,6 +30,8 @@ public interface DcsLockManager {
 //    DcsResource lockResourceByResourceId(String resourceId);
 
 //    DcsResourceLock get(String id);
+
+    DcsResource findResourceForUpdate(String resourceName,String resourceType);
 
     List<DcsResourceLock> findOthersLock(String ownedLockBizId,String resourceId);
 

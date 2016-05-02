@@ -74,4 +74,16 @@ public class DcsResource {
     public void setUtcCreated(Date utcCreated) {
         this.utcCreated = utcCreated;
     }
+
+    @Override
+    public String toString() {
+        return "DcsResource{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", maxLock=" + maxLock +
+                ", utcModified=" + utcModified +
+                ", utcCreated=" + utcCreated +
+                '}';
+    }
 }

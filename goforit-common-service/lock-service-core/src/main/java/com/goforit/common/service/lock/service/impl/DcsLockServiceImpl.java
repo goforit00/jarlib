@@ -12,12 +12,9 @@ import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by junqingfjq on 16/4/9.
@@ -28,9 +25,6 @@ public class DcsLockServiceImpl implements DcsLockService{
 
     @Autowired
     private DcsLockManager dcsLockManager;
-
-//    @Autowired
-//    private DcsResourceManager dcsResourceManager;
 
     @Autowired
     private TransactionTemplate transactionTemplate;
@@ -45,31 +39,21 @@ public class DcsLockServiceImpl implements DcsLockService{
         Preconditions.checkArgument(StringUtils.isNotBlank(lockRequest.getResourceType()),"resourceType");
         Preconditions.checkArgument(StringUtils.isNotBlank(lockRequest.getOwner()),"type");
 
-        if(StringUtils.isBlank(lockRequest.getUniqueBizId())){
-            lockRequest.setUniqueBizId(UUID.randomUUID().toString());
+        LockResult lockResult=null;
+
+        //创建资源（内部包掉存在的情况）
+        DcsResource dcsResource=dcsLockManager.createSharedResource(lockRequest);
+
+        DcsResourceLock ownedLock=dcsLockManager.lockSharedResource(lockRequest);
+
+        List<DcsResourceLock> othersLock=null;
+        if(null==ownedLock){
+            othersLock=dcsLockManager.findOthersLock(lockRequest.getUniqueBizId(),dcsResource.getId());
         }
 
-        LockResult lockResult=transactionTemplate.execute(new TransactionCallback<LockResult>() {
-            @Override
-            public LockResult doInTransaction(TransactionStatus status) {
+        LockResult result=new LockResult(ownedLock,othersLock);
 
-                //创建资源（内部包掉存在的情况）
-                DcsResource dcsResource=dcsLockManager.createSharedResource(lockRequest);
-
-                DcsResourceLock ownedLock=dcsLockManager.lockSharedResource(lockRequest);
-
-                List<DcsResourceLock> othersLock=null;
-                if(null==ownedLock){
-                     othersLock=dcsLockManager.findOthersLock(lockRequest.getUniqueBizId(),dcsResource.getId());
-                }
-
-                LockResult result=new LockResult(ownedLock,othersLock);
-
-                return result;
-            }
-        });
-
-        return lockResult;
+        return result;
     }
 
     @Override
@@ -77,29 +61,21 @@ public class DcsLockServiceImpl implements DcsLockService{
 
         Preconditions.checkArgument(StringUtils.isNotBlank(uniqueBizId));
 
-        transactionTemplate.execute(new TransactionCallback<Object>() {
-            @Override
-            public Object doInTransaction(TransactionStatus status) {
+        DcsResourceLock lock=dcsLockManager.findByUniqueBizId(uniqueBizId);
+        if(null==lock){
+            //TODO logger
+        }
 
-                DcsResourceLock lock=dcsLockManager.findByUniqueBizId(uniqueBizId);
-                if(null==lock){
-                    //TODO logger
-                    return null;
-                }
+        final String resourceId=lock.getResourceId();
+        //删除过期的锁
+        dcsLockManager.deleteExpiredLocks(resourceId);
 
-                final String resourceId=lock.getResourceId();
-                //删除过期的锁
-                dcsLockManager.deleteExpiredLocks(resourceId);
+        //释放资源锁
+        dcsLockManager.deleteLock(uniqueBizId);
 
-                //释放资源锁
-                dcsLockManager.deleteLock(uniqueBizId);
+        //释放资源
+        dcsLockManager.deleteResource(resourceId);
 
-                //释放资源
-                dcsLockManager.deleteResource(resourceId);
-
-                return null;
-            }
-        });
     }
 
 
@@ -129,8 +105,4 @@ public class DcsLockServiceImpl implements DcsLockService{
         return null;
     }
 
-
-    public static void main(String [] argv){
-        System.err.print(UUID.randomUUID());
-    }
 }

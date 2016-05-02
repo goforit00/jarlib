@@ -5,6 +5,12 @@ package com.goforit.common.service.lock.model.dcs;
  */
 public class LockRequest {
 
+    private static final LockType DEFAULT_LOCK_TYPE=LockType.EXCLUSIVE;
+
+    private static final int DEFAULT_LOCK_MAX_NUM=100;
+
+    private static final int DEFAULT_LOCK_DURATION=30;
+
     /**
      * 创建新锁的时候为非必填
      * 锁的唯一标识
@@ -50,10 +56,41 @@ public class LockRequest {
     private String owner;
 
     /**
-     * 非必填
+     * 非必填 默认值30s
      * 锁的持续时间(TTL 以秒为单位)
      */
     private int duration;
+
+    private LockRequest(){
+        
+    }
+
+    public static LockRequest buildRequest(String uniqueBizId, String resourceName,
+                                           String resourceType, LockType lockType,
+                                           int resourceMaxLock, String lockName, String owner,
+                                           int duration) {
+        LockRequest request = new LockRequest();
+        request.setUniqueBizId(uniqueBizId);
+        request.setResourceName(resourceName);
+        request.setResourceType(resourceType);
+        request.setLockType(lockType);
+        request.setResourceMaxLock(resourceMaxLock);
+        request.setLockName(lockName);
+        request.setOwner(owner);
+        request.setDuration(duration);
+
+        return request;
+    }
+
+    public static LockRequest buildRequest(String resourceName, String resourceType,
+                                           String lockName, String owner) {
+
+        return buildRequest(null, resourceName, resourceType, DEFAULT_LOCK_TYPE,
+            DEFAULT_LOCK_MAX_NUM, lockName, owner, DEFAULT_LOCK_DURATION);
+    }
+    
+    
+
 
     public String getUniqueBizId() {
         return uniqueBizId;
